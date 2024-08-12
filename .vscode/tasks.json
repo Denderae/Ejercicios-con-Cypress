@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "pruebas-chrome",
+			"problemMatcher": [],
+			"label": "npm: pruebas-chrome",
+			"detail": "Cypress run --spec cypress/e2e/TestFreerange.cy.js --browser chrome",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
