@@ -5,6 +5,7 @@ describe('Pruebas E2E', () => {
    
 
     it("Prueba E2E Happy path formulario primeras opciones del formulario", () => {
+        cy.get('#top').should('be.visible')//Que el id "top" se muestre correctamente en el header
         cy.get('#btn-make-appointment').click()
         cy.get('#txt-username').type("John Doe")
         cy.get('#txt-password').type("ThisIsNotAPassword")
@@ -13,10 +14,11 @@ describe('Pruebas E2E', () => {
         cy.get('#chk_hospotal_readmission').check()
         cy.get('#radio_program_medicare').check()
         cy.get('#txt_visit_date').click()
-        cy.get('tbody > :nth-child(3) > :nth-child(5)').click()
-        cy.get('tbody > :nth-child(3) > :nth-child(5)').should('not.be.visible')     
+        cy.get('tbody > :nth-child(3) > :nth-child(5)').click()    
         cy.get('#txt_comment').type("Test numero 1")
         cy.contains("Book Appointment").click()
+        cy.get('.col-xs-8').should('contain', 'Tokyo CURA Healthcare Center','Yes','Medicare','15/08/2024','Test numero 1')//Se valida contenido del formulario llenado
+        cy.get('.text-center > .btn').click()
     })
 
     it("Prueba E2E Happy path formulario segundas opciones del formulario", () => {
