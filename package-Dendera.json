@@ -1,0 +1,19 @@
+{
+  "name": "cypress1",
+  "version": "1.0.0",
+  "description": "Proyecto de pruebas",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Denderae"
+  },
+  "author": "Camilo Campos",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^13.13.2",
+    "cypress-xpath": "^2.0.1"
+  }
+}
