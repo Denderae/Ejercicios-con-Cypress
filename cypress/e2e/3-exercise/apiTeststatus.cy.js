@@ -13,5 +13,6 @@ describe('Creacion de usuario y validacion de respuesta http', () => {
             cy.log('Felicidades creaste un usuario')
 
         })
-
+        
+        //revisar documentacion cy.viewport() para adaptar la pantalla para distintos laptop , desktop ,movil . tambien se puede incluir en cypress.config
     })
