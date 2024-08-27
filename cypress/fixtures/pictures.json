@@ -1,0 +1,12 @@
+{
+    "ValidarImagenes": [
+      {
+        "id": 1,
+        "selector": ".hotel-logoUrl"
+      },
+      {
+        "id": 2,
+        "selector": ".img-responsive"
+      }
+    ]
+  }
