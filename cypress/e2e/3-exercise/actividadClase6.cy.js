@@ -1,47 +1,62 @@
-describe('Enviar mensaje',{testIsolation:false},() =>{
-
-
-    it('Validar envío de form vacío', () => {
-        cy.visit('https://automationintesting.online/')
-        cy.log('Envío de form de contacto en blanco...')
-        cy.get('#submitContact').click()
-        cy.get('.alert').should('be.visible')
-        cy.get('p').contains('Subject must be between 5 and 100 characters.')
-        cy.get('p').contains('Subject may not be blank')
-        cy.get('p').contains('Name may not be blank')
-        cy.get('p').contains('Message must be between 20 and 2000 characters.')
-        cy.get('p').contains('Message may not be blank')
-        cy.get('p').contains('Email may not be blank')
-        cy.get('p').contains('Phone may not be blank')
-        cy.get('p').contains('Phone must be between 11 and 21 characters.')
+describe('Test de cypress', { testIsolation: false }, () => {
+    // Envio de beforeEach para que se ejecute antes de cada test
+    beforeEach(() => {  
+      cy.visit('https://automationintesting.online/')
+      cy.clearAllLocalStorage();
+          cy.clearAllSessionStorage();
+          cy.clearAllCookies();
     })
-
-    it('Validar envío de form con data incorrecta',()=>{
-        cy.log('Set de datos incorrectos...')
-        cy.get('input[placeholder="Name"]').type('asd')
-        cy.get('input[placeholder="Email"]').type('asdasd')
-        cy.get('input[placeholder="Phone"]').type('asdasd')
-        cy.get('input[placeholder="Subject"]').type('asdasd')
-        cy.get('[data-testid="ContactDescription"]').type('asdasd')
-        cy.get('#submitContact').click()
-
-        cy.get('.alert').should('be.visible')
-        cy.get('p').contains('Phone must be between 11 and 21 characters.')
-        cy.get('p').contains('debe ser una dirección de correo electrónico con formato correcto')
-        cy.get('p').contains('Message must be between 20 and 2000 characters.')
+  
+    // Valida información del hotel
+    it('Validar Información del hotel', () => {
+      cy.fixture('example').then((data) => {
+        cy.ValidarInfoHotel(data.DatosDelHotel)
+      })
     })
-
-
-    it('Validar envío de form con data correcta',()=>{
-        cy.log('Set de datos incorrectos...')
-        cy.get('input[placeholder="Name"]').type('Juan Pérez')
-        cy.get('input[placeholder="Email"]').type('juan@gmail.com')
-        cy.get('input[placeholder="Phone"]').type('35123696457')
-        cy.get('input[placeholder="Subject"]').type('Reserva de habitación para fecha X')
-        cy.get('[data-testid="ContactDescription"]').type('loremTestloremTestloremTestloremTestloremTestloremTestloremTestloremTestloremTestlo') 
-        cy.get('#submitContact').click()
+  
+    // Valida imagen específica
+    it('Validar una imagen específica', () => {
+      cy.fixture('pictures').then((dataimagenes) => {
+        const idSeleccionado = 2 // ID de la imagen que quieres validar
+        cy.validarImagen(dataimagenes, idSeleccionado)
+      })
     })
-
-// Realizar un test que valide que el mensaje haya sido enviado con éxito por medio de la API
+  
+    // Valida descripción del hotel
+    it('Validar descripción del hotel', () => {
+      cy.fixture('verifyHomeData').then((data) => {
+        cy.CompleteP(data.DatosDelHotel.InformacionDelHotel)
+      })
+    })
+  
+    // Valida envío de formulario vacío
+    it('Validar envío de form vacío ,validacion de API respuesta 400', () => {
+      cy.intercept('POST', 'https://automationintesting.online/message/').as('enviodeformvacio')
+      cy.log('Envío de form de contacto en blanco...')
+      cy.fixture('formValidation').then((data) => {
+        cy.validarEnvioFormulario(data.formErrors, '@enviodeformvacio', 400)
+      })
+    })
+  
+    // Valida envío de formulario con datos incorrectos y validacion API respusta 400
+    it('Validar envío de form con data incorrecta', () => {
+      cy.intercept('POST', 'https://automationintesting.online/message/').as('enviodeformincorrecto')
+      cy.fixture('formValidation').then(({ formData, formErrors2 }) => {
+        cy.validarFormularioIncorrecto(formData, formErrors2)
+        cy.log('Envío de form de contacto con datos incorrectos...')
+        cy.validarEnvioFormulario(formErrors2, '@enviodeformincorrecto', 400)
+      })
+    })
+  
+    // Valida envío de formulario con datos correctos
+    it('Debería llenar y enviar el formulario correctamente', () => {
+      cy.intercept('POST', 'https://automationintesting.online/message/').as('enviodeformcorrecto')
+      cy.fixture('formValidation').then((data) => {
+        cy.llenarFormulario(data.formdatacorrecta)
+        cy.wait('@enviodeformcorrecto').then((interception) => {
+          expect(interception.response.statusCode).to.equal(201)
+        })
+      })
+    })
 
 })
