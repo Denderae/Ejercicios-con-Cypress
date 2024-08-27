@@ -9,7 +9,7 @@ describe('Test de cypress', { testIsolation: false }, () => {
   
     // Valida información del hotel
     it('Validar Información del hotel', () => {
-      cy.fixture('example').then((data) => {
+      cy.fixture('verifyHomeData').then((data) => {
         cy.ValidarInfoHotel(data.DatosDelHotel)
       })
     })
