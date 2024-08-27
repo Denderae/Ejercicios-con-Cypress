@@ -47,7 +47,7 @@ describe('Test de cypress', { testIsolation: false }, () => {
         cy.validarEnvioFormulario(formErrors2, '@enviodeformincorrecto', 400)
       })
     })
-  
+   
     // Valida envío de formulario con datos correctos
     it('Debería llenar y enviar el formulario correctamente', () => {
       cy.intercept('POST', 'https://automationintesting.online/message/').as('enviodeformcorrecto')
